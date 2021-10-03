@@ -1,0 +1,7 @@
+# Contains requirements common to all environments
+Django
+djangorestframework
+geojson
+django-cors-headers
+django-cors-middleware
+whitenoise
