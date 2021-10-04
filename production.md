@@ -198,7 +198,7 @@ exit
 
 Afin de garantir le fonctionnement de l'API en cas de redémarrage du serveur, il convient de créer un service géré par le serveur pour le lancement de Gunicorn. 
 
-* Création du fichier de service  dans `/etc/systemd/system/vapormap-api.service`.
+* Génération du fichier de service : `vapormap-api.service`.
 ``` bash
 export VAPORMAP_USER=app-vapormap
 export VAPORMAP_GROUP=app-vapormap
@@ -210,8 +210,9 @@ export VAPOR_DBPASS=vapormap
 export VAPOR_DBHOST=localhost
 export VAPOR_DBNAME=db_vapormap
 export VAPORMAP_API_PORT=8001
-envsubst '${VAPORMAP_USER},${VAPORMAP_GROUP},${VAPORMAP_DIR},${VAPORMAP_PATH},${DJANGO_SETTINGS_MODULE},${VAPOR_DBUSER},${VAPOR_DBPASS},${VAPOR_DBHOST},${VAPOR_DBNAME},${VAPORMAP_API_PORT}' < api-systemd.conf.template > api-systemd.conf
-cp api-systemd.conf /tmp
+envsubst '${VAPORMAP_USER},${VAPORMAP_GROUP},${VAPORMAP_DIR},${VAPORMAP_PATH},${DJANGO_SETTINGS_MODULE},${VAPOR_DBUSER},${VAPOR_DBPASS},${VAPOR_DBHOST},${VAPOR_DBNAME},${VAPORMAP_API_PORT}' < api-systemd.conf.template > /tmp/api-systemd.conf
+
+cat /tmp/api-systemd.conf
 ```
 
 * La mise en place du service nécéssite des droits "sudo", que l'utilisateur 'app-vapormap' n'a pas :
@@ -219,7 +220,7 @@ cp api-systemd.conf /tmp
 exit
 ``` 
 
-* Mise en place du fichier de configuration
+* Mise en place du fichier de configuration dans systemd
 ``` bash
 sudo cp /tmp/api-systemd.conf /etc/systemd/system/vapormap-api.service
 sudo chmod 755 /etc/systemd/system/vapormap-api.service
