@@ -1,0 +1,55 @@
+version: "3.7"
+services:
+
+  frontend:
+    image: vapormap-prod-fe
+    ports:
+      - 8000:80
+    environment:
+      - VAPORMAP_BACKEND=localhost 
+      - VAPORMAP_BACKEND_PORT=8001
+    depends_on:
+      - backend
+
+  backend:
+    image: vapormap-prod-be
+    ports:
+      - 8001:8001
+    environment:
+      - VAPOR_DBNAME=db_vapormap
+      - VAPOR_DBUSER=user_vapormap
+      - VAPOR_DBPASS=vapormap
+      - VAPOR_DBHOST=mysql
+    restart: on-failure
+    depends_on:
+      - migration
+      - mysql
+
+  migration:
+    image: vapormap-migrate
+    environment:
+      - VAPOR_DBNAME=db_vapormap
+      - VAPOR_DBUSER=user_vapormap
+      - VAPOR_DBPASS=vapormap
+      - VAPOR_DBHOST=mysql
+    command: python manage.py migrate --noinput
+    restart: on-failure
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:5
+    restart: always
+    volumes:
+      - mysqldata:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_USER=root
+      - MYSQL_ROOT_PASSWORD=0000
+      - MYSQL_DATABASE=db_vapormap
+      - MYSQL_USER=user_vapormap
+      - MYSQL_PASSWORD=vapormap
+
+volumes:
+  mysqldata:
+
+

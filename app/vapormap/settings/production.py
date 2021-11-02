@@ -17,7 +17,7 @@ ALLOWED_HOSTS = ['*']
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'mysql.connector.django',
         'NAME':  os.environ.get('VAPOR_DBNAME', 'vapordb'),
         'USER': os.environ.get('VAPOR_DBUSER', 'vaporuser'),
         'PASSWORD': os.environ.get('VAPOR_DBPASS', 'vaporpass'),
